@@ -2,8 +2,8 @@
 <head>
    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
    <title>OHBM App</title>
-   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css" type="text/css" >
@@ -12,23 +12,56 @@
       src="https://code.jquery.com/jquery-3.2.1.min.js"
       integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
       crossorigin="anonymous"></script>
+   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+      <style>
+        .input {
+          width: 100%;
+          max-width: 100%;
+        }
+        .form-inline {
+          margin: 0;
+          width: 100%;
+          max-width: 100%;
+        }
+      </style>
 </head>
 
 <body>
   <div id="content">
+
      <nav class="navbar sticky-top navbar-toggleable-md navbar-light bg-faded">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-           <a class="navbar-brand" href="#">OHBM App</a>
-           <form class="form-inline my-2 my-lg-0">
-              <input class="form-control mr-sm-2" type="text" v-bind:placeholder="searchStr" v-model="searchStr">
-              <button class="btn btn-outline-success my-2 my-sm-0" v-on:click="runSearch">Search</button>
-           </form>
-        </div>
+       <form class="form-inline">
+          <input class="form-control" type="text" v-bind:placeholder="searchStr" v-model="searchStr" style="width:100%;">
+          <!--<button class="btn btn-outline-success my-2 my-sm-0" v-on:click="runSearch">Search</button>-->
+       </form>
+
      </nav>
-     {{searchStr}}
+     <div id="cards" class="row container">
+       <div class="col-xs">
+       <div v-for="(res, index) in results">
+           <div class="card box mt-2">
+            <div class="card-block">
+              <h4 class="card-title">{{res.title}}</h4>
+              <p class="card-text">{{res.content}}</p>
+
+              <div class="collapse" v-bind:id="'collapseExample'+index">
+                <p class="card-text">
+                  {{res.abstract}}
+                </p>
+                <br>
+              </div>
+
+              <a href="#" class="btn btn-outline-primary btn-xs"><i class="fa fa-calendar" aria-hidden="true"></i></a>
+              <button class="btn btn-outline-info btn-xs" type="button" data-toggle="collapse" v-bind:data-target="'#collapseExample' + index" aria-expanded="false" v-bind:aria-controls="'collapseExample'+index">
+                <i class="fa fa-newspaper-o" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+
+         </div>
+       </div>
+     </div>
+
 
   </div>
 </body>
@@ -37,7 +70,16 @@
 var app = new Vue({
        el: "#content",
        data: {
-         results: [],
+         results: [
+           {"title":"some title",
+            "content": "some content",
+            "abstract": "Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident."
+          },
+          {"title":"some other title",
+           "content": "some other content",
+           "abstract": "Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident."
+          }
+         ],
          searchStr: ""
        },
        methods:{
