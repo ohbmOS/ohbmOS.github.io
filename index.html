@@ -8,7 +8,6 @@
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css" type="text/css" >
    <script src="bower_components/elasticsearch/elasticsearch.min.js"></script>
-   <script src="bower_components/elasticsearch/elasticsearch.jquery.min.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
    <script src="https://unpkg.com/vue"></script>
    <script
@@ -110,9 +109,11 @@ var app = new Vue({
 })*/
 
 var client = new elasticsearch.Client({
-  hosts: 'http://174.129.20.29:9000/',
+  host: "http://elastic:changeme@174.129.20.29:9200",
   log: "trace"
 });
+
+
 
 client.ping({
   requestTimeout: 30000,
