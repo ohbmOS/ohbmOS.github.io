@@ -7,6 +7,9 @@
    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css" type="text/css" >
+   <script src="bower_components/elasticsearch/elasticsearch.min.js"></script>
+   <script src="bower_components/elasticsearch/elasticsearch.jquery.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
    <script src="https://unpkg.com/vue"></script>
    <script
       src="https://code.jquery.com/jquery-3.2.1.min.js"
@@ -31,8 +34,8 @@
 
      <nav class="navbar sticky-top navbar-toggleable-md navbar-light bg-faded">
        <form class="form-inline">
-          <input class="form-control" type="text" v-bind:placeholder="searchStr" v-model="searchStr" style="width:100%;">
-          <!--<button class="btn btn-outline-success my-2 my-sm-0" v-on:click="runSearch">Search</button>-->
+          <input class="form-control" type="text" placeholder="Search for OHBM Abstracts" v-model="searchStr" style="width:100%;" v-on:enter="runSearch">
+          <button class="btn btn-outline-success my-2 my-sm-0" v-on:click="runSearch" hidden>Search</button>
        </form>
 
      </nav>
@@ -42,18 +45,18 @@
            <div class="card box mt-2">
             <div class="card-block">
               <h4 class="card-title">{{res.title}}</h4>
-              <p class="card-text">{{res.content}}</p>
+              <p class="card-text"><i style="color:grey;">{{res.content}}</i></p>
 
               <div class="collapse" v-bind:id="'collapseExample'+index">
                 <p class="card-text">
-                  {{res.abstract}}
+                  {{res.results}}
                 </p>
                 <br>
               </div>
 
               <a href="#" class="btn btn-outline-primary btn-xs"><i class="fa fa-calendar" aria-hidden="true"></i></a>
               <button class="btn btn-outline-info btn-xs" type="button" data-toggle="collapse" v-bind:data-target="'#collapseExample' + index" aria-expanded="false" v-bind:aria-controls="'collapseExample'+index">
-                <i class="fa fa-newspaper-o" aria-hidden="true"></i>
+                <i class="fa fa-chevron-down" aria-hidden="true"></i>
               </button>
             </div>
           </div>
@@ -73,12 +76,24 @@ var app = new Vue({
          results: [
            {"title":"some title",
             "content": "some content",
+            "date": 1,
             "abstract": "Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident."
           },
           {"title":"some other title",
            "content": "some other content",
+           "date": 5,
            "abstract": "Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident."
-          }
+         },
+         {"title":"some title foo",
+          "content": "some content",
+          "date": 3,
+          "abstract": "Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident."
+        },
+        {"title":"some other title bar",
+         "content": "some other content",
+         "date": 4,
+         "abstract": "Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident."
+        }
          ],
          searchStr: ""
        },
@@ -89,6 +104,25 @@ var app = new Vue({
          }
        }
 })
+
+/*$.getJSON("https://dl.dropboxusercontent.com/s/tlj4bd6d76jqpzi/ohbm2017_abstracts.json?dl=0", function(data,res){
+  app.results = data.slice(0,5)
+})*/
+
+var client = new elasticsearch.Client({
+  hosts: 'http://174.129.20.29:9000/',
+  log: "trace"
+});
+
+client.ping({
+  requestTimeout: 30000,
+}, function (error) {
+  if (error) {
+    console.error('elasticsearch cluster is down!');
+  } else {
+    console.log('All is well');
+  }
+});
 
 </script>
 
