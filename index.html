@@ -47,11 +47,10 @@
               <h4 class="card-title">{{res._source.title}}</h4>
               <p class="card-text">{{res._source.startsOn}}</i></p>
               <p class="card-text">
-                <div v-if="res._source.events.event.room">{{res._source.events.event.room}}</div>
+                <div v-if="res._source.events.event.room"><b>Location: </b> {{res._source.events.event.room}}</div>
                 <div v-else><b>Location: </b> Poster Room</div>
               </p> <!--TODO: if null, show poster-->
-              <p class="card-text">{{res._source.authorslist}}</i></p>
-              <p class="card-text"><i style="color:grey;">{{res.content}}</i></p>
+              <p class="card-text"><i style="color:grey;">{{res._source.authorslist.join(",")}}</i></p>
 
               <div class="collapse" v-bind:id="'collapseExample'+index">
                 <p class="card-text">
@@ -98,6 +97,12 @@ var app = new Vue({
             }, function (err) {
                 console.trace(err.message);
             });
+         }
+       },
+       computed:{
+         formatAuth: function(authors){
+           console.log(authors)
+           return authors.join(",")
          }
        }
 })
