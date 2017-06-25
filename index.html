@@ -7,7 +7,7 @@
    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css" type="text/css" >
-   <script src="bower_components/elasticsearch/elasticsearch.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/elasticsearch/13.2.0/elasticsearch.min.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
    <script src="https://unpkg.com/vue"></script>
    <script
@@ -43,7 +43,10 @@
        <div v-for="(res, index) in results">
            <div class="card box mt-2">
             <div class="card-block">
-              <h4 class="card-title">{{res.title}}</h4>
+              <h4 class="card-title">{{res._source.title}}</h4>
+              <p class="card-text">{{res._source.startsOn}}</i></p>
+              <p class="card-text">{{res._source.events.event.room}}</i></p> <!--TODO: if null, show poster-->
+              <p class="card-text">{{res._source.authorslist}}</i></p>
               <p class="card-text"><i style="color:grey;">{{res.content}}</i></p>
 
               <div class="collapse" v-bind:id="'collapseExample'+index">
@@ -72,34 +75,23 @@
 var app = new Vue({
        el: "#content",
        data: {
-         results: [
-           {"title":"some title",
-            "content": "some content",
-            "date": 1,
-            "abstract": "Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident."
-          },
-          {"title":"some other title",
-           "content": "some other content",
-           "date": 5,
-           "abstract": "Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident."
-         },
-         {"title":"some title foo",
-          "content": "some content",
-          "date": 3,
-          "abstract": "Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident."
-        },
-        {"title":"some other title bar",
-         "content": "some other content",
-         "date": 4,
-         "abstract": "Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident."
-        }
-         ],
+         results: [],
          searchStr: ""
        },
        methods:{
          runSearch: function(e){
            e.preventDefault()
-           console.log(this.searchStr)
+           client.search({
+              index: 'ohbm',
+              type: 'abstract',
+              q: this.searchStr
+            }).then(function (resp) {
+                var hits = resp.hits.hits;
+                console.log(hits)
+                app.results = hits
+            }, function (err) {
+                console.trace(err.message);
+            });
          }
        }
 })
@@ -124,6 +116,15 @@ client.ping({
     console.log('All is well');
   }
 });
+
+/*client.search({
+  q: 'ohbm/abstract/hipp'
+}).then(function (body) {
+  var hits = body.hits.hits;
+  console.log(hits)
+}, function (error) {
+  console.trace(error.message);
+});*/
 
 </script>
 
