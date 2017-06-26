@@ -60,8 +60,8 @@
      </h4>
      </div>
 -->
-     <div id="cards" class="row container">
-       <div class="col-xs">
+     <div id="cards" class="row" style="padding-left:2%; padding-right:2%;">
+       <div>
          <div v-if="!this.init && !this.total" class="alert alert-danger" role="alert">
           <strong >Oh snap! {{total}}  hits!</strong> Change a few things up and try submitting again.
         </div>
@@ -70,7 +70,7 @@
        </div>
        <h1 v-if="this.init">The Open Science SIG's OHBM Hackathon 2017 Itinerary App</h1>
 
-       <div v-for="(res, index) in results">
+       <div v-for="(res, index) in results" class="card-deck">
            <div class="card box mt-2">
             <div class="card-block">
               <h4 class="card-title">{{res._source.title}}</h4>
@@ -83,7 +83,11 @@
               </div>
 
               </p> <!--TODO: if null, show poster-->
-              <p class="card-text"><i style="color:grey;">{{res._source.authorslist.join(", ")}}</i></p>
+              <p class="card-text">
+                <i style="color:grey;" v-for="auth in res._source.authorslist">
+                  <a href="#" v-on:click="searchAuth" style="color:grey; text-decoration: underline;">{{auth}}</a>,
+                </i>
+              </p>
 
               <div class="collapse" v-bind:id="'collapseExample'+index">
                 <p class="card-text">
@@ -160,6 +164,12 @@ var app = new Vue({
            this.from = 0
            this.searchStr = e;
            this.runSearch();
+         },
+         searchAuth: function(e){
+           console.log("searching auth", e.target.text)
+           this.searchStr = '"'+e.target.text+'"'
+           this.from = 0
+           this.runSearch()
          },
          formatRoomURL: function(room){
           room = room.split('-')[0]
