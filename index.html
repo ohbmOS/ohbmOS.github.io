@@ -32,7 +32,7 @@
   <div id="content">
 
      <nav class="navbar sticky-top navbar-toggleable-md navbar-light bg-faded">
-       <form class="form-inline">
+       <form class="form-inline" v-on:submit="runSearch">
           <input class="form-control" type="text" placeholder="Search for OHBM Abstracts" v-model="searchStr" style="width:100%;" v-on:enter="runSearch">
           <button class="btn btn-outline-success my-2 my-sm-0" v-on:click="runSearch" hidden>Search</button>
        </form>
@@ -84,6 +84,7 @@ var app = new Vue({
        },
        methods:{
          runSearch: function(e){
+           console.log("hello")
            e.preventDefault()
            client.search({
               index: 'ohbm',
@@ -97,6 +98,7 @@ var app = new Vue({
             }, function (err) {
                 console.trace(err.message);
             });
+            return false;
          }
        },
        computed:{
@@ -107,16 +109,10 @@ var app = new Vue({
        }
 })
 
-/*$.getJSON("https://dl.dropboxusercontent.com/s/tlj4bd6d76jqpzi/ohbm2017_abstracts.json?dl=0", function(data,res){
-  app.results = data.slice(0,5)
-})*/
-
 var client = new elasticsearch.Client({
   host: "http://elastic:changeme@174.129.20.29:9200",
   log: "trace"
 });
-
-
 
 client.ping({
   requestTimeout: 30000,
@@ -127,15 +123,6 @@ client.ping({
     console.log('All is well');
   }
 });
-
-/*client.search({
-  q: 'ohbm/abstract/hipp'
-}).then(function (body) {
-  var hits = body.hits.hits;
-  console.log(hits)
-}, function (error) {
-  console.trace(error.message);
-});*/
 
 </script>
 
