@@ -30,7 +30,6 @@
 
 <body>
   <div id="content">
-<H1>The Open Science SIG's OHBM Hackathon 2017 Itinerary App</H1>
      <nav class="navbar sticky-top navbar-toggleable-md navbar-light bg-faded">
        <form class="form-inline" v-on:submit="runSearch">
           <input class="form-control" type="text" placeholder="Search for OHBM Abstracts" v-model="searchStr" style="width:100%;" v-on:enter="runSearch" v-on:keyup="resetPage">
@@ -69,6 +68,8 @@
         <div v-else-if="total > 0" class="alert alert-success" role="alert">
          <strong >Hits {{total}} </strong>
        </div>
+       <h1 v-if="this.init">The Open Science SIG's OHBM Hackathon 2017 Itinerary App</h1>
+
        <div v-for="(res, index) in results">
            <div class="card box mt-2">
             <div class="card-block">
@@ -141,7 +142,7 @@ var app = new Vue({
                   self.results = self.results.concat(hits)
                 }
                 self.from = self.from + self.size
-                this.init = 0
+                self.init = 0
             }, function (err) {
                 //console.trace(err.message);
             });
