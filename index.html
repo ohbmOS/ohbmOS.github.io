@@ -10,6 +10,7 @@
    <script src="https://cdnjs.cloudflare.com/ajax/libs/elasticsearch/13.2.0/elasticsearch.min.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
    <script src="https://unpkg.com/vue"></script>
+   <script src="https://cdn.rawgit.com/datejs/Datejs/master/build/date.js"></script>
    <script
       src="https://code.jquery.com/jquery-3.2.1.min.js"
       integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
@@ -36,7 +37,7 @@
           <button class="btn btn-outline-success my-2 my-sm-0" v-on:click="runSearch" hidden>Search</button>
        </form>
      </nav>
-<div class="row justify-content-around">
+<div class="row justify-content-around" style="padding-top:10px; padding-bottom:10px;">
   <div class="btn-group col-11" role="group">
     <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       Examples
@@ -48,6 +49,7 @@
       <a class="dropdown-item" v-on:click="run_query('fMRI AND ICA')">logic: OR AND</a>
     </div>
   </div>
+
 </div>
 <!--
      <div class="card row">
@@ -126,7 +128,7 @@ var app = new Vue({
        },
        methods:{
          runSearch: function(e){
-           //console.log("hello")
+           console.log("running search", this.searchStr)
 
            if (e) {
               e.preventDefault()
@@ -188,8 +190,8 @@ var app = new Vue({
            this.from = 0
          },
          getCalLink: function(data){
-           var s = new Date(data.startsOn)
-           var e = new Date(data.endsOn)
+           var s = Date.parse(data.startsOn)
+           var e = Date.parse(data.endsOn)
            var l = ''
 
            var dateTime = (s.toISOString().replace(/-|:|\.\d\d\d/g,""))+"/"+(e.toISOString().replace(/-|:|\.\d\d\d/g,""))
