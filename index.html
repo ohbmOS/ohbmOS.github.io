@@ -74,12 +74,14 @@
            <div class="card box mt-2">
             <div class="card-block">
               <h4 class="card-title">{{res._source.title}}</h4>
-              <p class="card-text">{{res._source.startsOn}}</i></p>
-              <p class="card-text">
-                <div v-if="res._source.events.event.room"><b>Location: </b>
-		  <a v-bind:href= "formatRoomURL(res._source.events.event.room.split(' ')[1])"> Room {{res._source.events.event.room.split(' ')[1]}} </a>
-		</div>
-                <div v-else><b>Location: </b> <a href='http://www.vancouverconventioncentre.com/facility/floor-plans-and-specs#west-exhibition-hall-a_west-exhibition-hall-b1_west-exhibition-hall-b2_west-exhibition-hall-b3_west-exhibition-hall-c'>Poster {{res._source.abstractNumber}}</a></div>
+	      <div v-if="res._source.abstractType == 'Abstract Submission'">
+                <p class="card-text"><a href='http://www.vancouverconventioncentre.com/facility/floor-plans-and-specs#west-exhibition-hall-a_west-exhibition-hall-b1_west-exhibition-hall-b2_west-exhibition-hall-b3_west-exhibition-hall-c'>Poster {{res._source.abstractNumber}}</a> : {{res._source.startsOn}}</p>
+	        <div v-if="(res._source.title == res._source.events.event.title)">
+                  <p class="card-text" v-if="res._source.events.event.room"><a v-bind:href= "formatRoomURL(res._source.events.event.room.split(' ')[1])"> Room {{res._source.events.event.room.split(' ')[1]}} </a></p>
+		  <p class="card-text"><b>Talk time:</b> {{res._source.events.event.startson}}</i></p>
+                </div>
+              </div>
+
               </p> <!--TODO: if null, show poster-->
               <p class="card-text"><i style="color:grey;">{{res._source.authorslist.join(", ")}}</i></p>
 
