@@ -11,6 +11,8 @@
    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
    <script src="https://unpkg.com/vue"></script>
    <script src="https://cdn.rawgit.com/datejs/Datejs/master/build/date.js"></script>
+   <script src="https://cdn.rawgit.com/marcuswestin/store.js/master/dist/store.everything.min.js"></script>
+   <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/vuex/2.3.1/vuex.min.js"></script>-->
    <script
       src="https://code.jquery.com/jquery-3.2.1.min.js"
       integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
@@ -69,23 +71,6 @@
           z-index: 100000;
           transform: rotate(45deg);
           -webkit-transform: rotate(45deg);
-        }
-
-        .corner-ribbon.bottom-left{
-          top: auto;
-          bottom: 25px;
-          left: -50px;
-          transform: rotate(45deg);
-          -webkit-transform: rotate(45deg);
-        }
-
-        .corner-ribbon.bottom-right{
-          top: auto;
-          right: -50px;
-          bottom: 25px;
-          left: auto;
-          transform: rotate(-45deg);
-          -webkit-transform: rotate(-45deg);
         }
 
         /* Colors */
@@ -225,6 +210,7 @@ var app = new Vue({
                 }
                 self.from = self.from + self.size
                 self.init = 0
+                store.set("lastSearch", self.searchStr)
             }, function (err) {
                 //console.trace(err.message);
             });
@@ -305,6 +291,20 @@ var app = new Vue({
        }
 })
 
+
+
+/*var store = new Vuex.Store({
+  state: {
+    count: 0
+  },
+  mutations: {
+    increment (state) {
+      state.count++
+    }
+  }
+})
+*/
+
 var client = new elasticsearch.Client({
   host: "http://elastic:changeme@174.129.20.29:9200",
   //log: "trace"
@@ -320,7 +320,12 @@ client.ping({
   }
 });
 
-app.doScroll = true
+var last = store.get("lastSearch")
+
+if (last){
+  app.searchStr = last
+  app.runSearch()
+}
 
 </script>
 
