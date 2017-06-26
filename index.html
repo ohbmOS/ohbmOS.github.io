@@ -37,13 +37,30 @@
           <button class="btn btn-outline-success my-2 my-sm-0" v-on:click="runSearch" hidden>Search</button>
        </form>
      </nav>
-     <h4> Examples:
-       <button class="btn btn-info" v-on:click="run_query('hippoca* AND ica')">hippoca* AND ica</button>
-       <button class="btn btn-info" v-on:click="run_query('authorslist:turner')">authorslist:turner</button>
-       <button class="btn btn-info" v-on:click="run_query('startsOn:2017-06-26')">startsOn:"2017-06-26"</button>
-       <button class="btn btn-info" v-on:click="run_query('fMRI AND ICA')">capitalize logic: OR AND</button>
+<div class="card row">
+  <div class="btn-group" role="group">
+    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Examples
+    </button>
+    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+      <a class="dropdown-item" v-on:click="run_query('hippoca* AND ica')">hippoca* AND ica</a>
+      <a class="dropdown-item" v-on:click="run_query('authorslist:turner')">authorslist:turner</a>
+      <a class="dropdown-item" v-on:click="run_query('startsOn:2017-06-26')">startsOn:"2017-06-26"</a>
+      <a class="dropdown-item" v-on:click="run_query('fMRI AND ICA')">logic: OR AND</a>
+    </div>
+  </div>
+</div>
+<!--
+     <div class="card row">
+     <h4> 
+       <button class="btn col-sm-2">Examples:</button>
+       <button class="btn btn-info col-sm-3" v-on:click="run_query('hippoca* AND ica')">hippoca* AND ica</button>
+       <button class="btn btn-info col-sm-3" v-on:click="run_query('authorslist:turner')">authorslist:turner</button>
+       <button class="btn btn-info col-sm-3" v-on:click="run_query('startsOn:2017-06-26')">startsOn:"2017-06-26"</button>
+       <button class="btn btn-info col-sm-3" v-on:click="run_query('fMRI AND ICA')">logic: OR AND</button>
      </h4>
-
+     </div>
+-->
      <div id="cards" class="row container">
        <div class="col-xs">
          <div v-if="!total" class="alert alert-danger" role="alert">
