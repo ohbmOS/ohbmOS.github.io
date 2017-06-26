@@ -84,7 +84,7 @@ var app = new Vue({
        },
        methods:{
          runSearch: function(e){
-           console.log("hello")
+           //console.log("hello")
            e.preventDefault()
            client.search({
               index: 'ohbm',
@@ -96,14 +96,14 @@ var app = new Vue({
                 app.total = resp.hits.total
                 app.results = hits
             }, function (err) {
-                console.trace(err.message);
+                //console.trace(err.message);
             });
             return false;
          }
        },
        computed:{
          formatAuth: function(authors){
-           console.log(authors)
+           //console.log(authors)
            return authors.join(",")
          }
        }
@@ -111,7 +111,7 @@ var app = new Vue({
 
 var client = new elasticsearch.Client({
   host: "http://elastic:changeme@174.129.20.29:9200",
-  log: "trace"
+  //log: "trace"
 });
 
 client.ping({
