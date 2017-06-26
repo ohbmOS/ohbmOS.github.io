@@ -53,13 +53,15 @@
 </div>
      <div id="cards" class="row" style="padding-left:2%; padding-right:2%;">
        <div>
-         <div v-if="!this.init && !this.total" class="alert alert-danger" role="alert">
+        <div v-if="this.init" class="alert alert-info" role="alert">
+                 <strong>The Open Science SIG's OHBM Hackathon 2017 Itinerary App</strong>
+        </div>
+         <div v-else-if="!this.init && !this.total" class="alert alert-danger" role="alert">
           <strong >Oh snap! {{total}}  hits!</strong> Change a few things up and try submitting again.
         </div>
         <div v-else-if="total > 0" class="alert alert-success" role="alert">
          <strong >Hits {{total}} </strong>
        </div>
-       <h1 v-if="this.init">The Open Science SIG's OHBM Hackathon 2017 Itinerary App</h1>
 
        <div v-for="(res, index) in results" class="card-deck">
            <div class="card box mt-2">
