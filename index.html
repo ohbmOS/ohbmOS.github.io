@@ -60,8 +60,8 @@
      </h4>
      </div>
 -->
-     <div id="cards" class="row container">
-       <div class="col-xs">
+     <div id="cards" class="row" style="padding-left:2%; padding-right:2%;">
+       <div>
          <div v-if="!this.init && !this.total" class="alert alert-danger" role="alert">
           <strong >Oh snap! {{total}}  hits!</strong> Change a few things up and try submitting again.
         </div>
@@ -70,7 +70,7 @@
        </div>
        <h1 v-if="this.init">The Open Science SIG's OHBM Hackathon 2017 Itinerary App</h1>
 
-       <div v-for="(res, index) in results">
+       <div v-for="(res, index) in results" class="card-deck">
            <div class="card box mt-2">
             <div class="card-block">
               <h4 class="card-title">{{res._source.title}}</h4>
