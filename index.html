@@ -1,7 +1,7 @@
 <html>
 <head>
    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-   <title>OHBM App</title>
+   <title>The Open Science SIG's OHBM Hackathon 2017 Itinerary App App</title>
    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
@@ -30,10 +30,9 @@
 
 <body>
   <div id="content">
-
      <nav class="navbar sticky-top navbar-toggleable-md navbar-light bg-faded">
        <form class="form-inline" v-on:submit="runSearch">
-          <input class="form-control" type="text" placeholder="Search for OHBM Abstracts" v-model="searchStr" style="width:100%;" v-on:enter="runSearch">
+          <input class="form-control" type="text" placeholder="Search for OHBM Abstracts" v-model="searchStr" style="width:100%;" v-on:enter="runSearch" v-on:keyup="resetPage">
           <button class="btn btn-outline-success my-2 my-sm-0" v-on:click="runSearch" hidden>Search</button>
        </form>
      </nav>
@@ -52,7 +51,7 @@
 </div>
 <!--
      <div class="card row">
-     <h4> 
+     <h4>
        <button class="btn col-sm-2">Examples:</button>
        <button class="btn btn-info col-sm-3" v-on:click="run_query('hippoca* AND ica')">hippoca* AND ica</button>
        <button class="btn btn-info col-sm-3" v-on:click="run_query('authorslist:turner')">authorslist:turner</button>
@@ -63,12 +62,14 @@
 -->
      <div id="cards" class="row container">
        <div class="col-xs">
-         <div v-if="!total" class="alert alert-danger" role="alert">
+         <div v-if="!this.init && !this.total" class="alert alert-danger" role="alert">
           <strong >Oh snap! {{total}}  hits!</strong> Change a few things up and try submitting again.
         </div>
-        <div v-else class="alert alert-success" role="alert">
+        <div v-else-if="total > 0" class="alert alert-success" role="alert">
          <strong >Hits {{total}} </strong>
        </div>
+       <h1 v-if="this.init">The Open Science SIG's OHBM Hackathon 2017 Itinerary App</h1>
+
        <div v-for="(res, index) in results">
            <div class="card box mt-2">
             <div class="card-block">
@@ -97,6 +98,7 @@
           </div>
 
          </div>
+         <button class="btn btn-outline-primary btn-large" style="width:100%; margin-top:10px; margin-bottom:10px;" v-if="from < total" v-on:click="nextSearch">Next</button>
        </div>
      </div>
 
@@ -110,30 +112,48 @@ var app = new Vue({
        data: {
          results: [],
          total: 0,
-         searchStr: ""
+         searchStr: "",
+         from: 0,
+         size:10,
+         doScroll: true,
+         init: 1
        },
        methods:{
          runSearch: function(e){
            //console.log("hello")
+
            if (e) {
               e.preventDefault()
            }
+           if(this.from<=this.total){
+             var self=this
            client.search({
               index: 'ohbm',
               type: 'abstract',
+              size:this.size,
+              from:this.from,
               q: this.searchStr
             }).then(function (resp) {
                 var hits = resp.hits.hits;
-                //console.log(hits)
-                app.total = resp.hits.total
-                app.results = hits
+                self.total = resp.hits.total
+                if (!self.from){
+                  self.results = hits
+                }
+                else{
+                  console.log("appending")
+                  self.results = self.results.concat(hits)
+                }
+                self.from = self.from + self.size
+                self.init = 0
             }, function (err) {
                 //console.trace(err.message);
             });
+          }
             return false;
          },
          run_query: function(e){
            console.log(e);
+           this.from = 0
            this.searchStr = e;
            this.runSearch();
          },
@@ -147,6 +167,13 @@ var app = new Vue({
              place = 'meeting-room-'
           }
           return 'http://www.vancouverconventioncentre.com/facility/floor-plans-and-specs#west-' + place + room
+         },
+         nextSearch: function(e){
+             this.runSearch(e)
+           return false
+         },
+         resetPage: function(e){
+           this.from = 0
          }
 
        },
@@ -172,6 +199,8 @@ client.ping({
     console.log('All is well');
   }
 });
+
+app.doScroll = true
 
 </script>
 
