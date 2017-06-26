@@ -38,10 +38,10 @@
        </form>
      </nav>
      <h4> Examples:
-       <span class="badge badge-info" v-on:click="run_query('hippoca* AND ica')">hippoca* AND ica</span>
-       <span class="badge badge-info" v-on:click="run_query('authorslist:turner')">authorslist:turner</span>
-       <span class="badge badge-info" v-on:click="run_query('startsOn:2017-06-26')">startsOn:"2017-06-26"</span>
-       <span class="badge badge-info" v-on:click="run_query('fMRI AND ICA')">capitalize logic: OR AND</span>
+       <button class="btn btn-info" v-on:click="run_query('hippoca* AND ica')">hippoca* AND ica</button>
+       <button class="btn btn-info" v-on:click="run_query('authorslist:turner')">authorslist:turner</button>
+       <button class="btn btn-info" v-on:click="run_query('startsOn:2017-06-26')">startsOn:"2017-06-26"</button>
+       <button class="btn btn-info" v-on:click="run_query('fMRI AND ICA')">capitalize logic: OR AND</button>
      </h4>
 
      <div id="cards" class="row container">
