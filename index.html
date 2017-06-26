@@ -33,7 +33,7 @@
 
      <nav class="navbar sticky-top navbar-toggleable-md navbar-light bg-faded">
        <form class="form-inline" v-on:submit="runSearch">
-          <input class="form-control" type="text" placeholder="Search for OHBM Abstracts" v-model="searchStr" style="width:100%;" v-on:enter="runSearch">
+          <input class="form-control" type="text" placeholder="Search for OHBM Abstracts" v-model="searchStr" style="width:100%;" v-on:enter="runSearch" v-on:keyup="resetPage">
           <button class="btn btn-outline-success my-2 my-sm-0" v-on:click="runSearch" hidden>Search</button>
        </form>
      </nav>
@@ -78,6 +78,7 @@
           </div>
 
          </div>
+         <button class="btn btn-outline-primary btn-large" style="width:100%; margin-top:10px; margin-bottom:10px;" v-if="from < total" v-on:click="nextSearch">Next</button>
        </div>
      </div>
 
@@ -91,7 +92,10 @@ var app = new Vue({
        data: {
          results: [],
          total: 0,
-         searchStr: ""
+         searchStr: "",
+         from: 0,
+         size:10,
+         doScroll: true
        },
        methods:{
          runSearch: function(e){
@@ -99,24 +103,43 @@ var app = new Vue({
            if (e) {
               e.preventDefault()
            }
+           if(this.from<this.total || this.total == 0){
+             var self=this
            client.search({
               index: 'ohbm',
               type: 'abstract',
+              size:this.size,
+              from:this.from,
               q: this.searchStr
             }).then(function (resp) {
                 var hits = resp.hits.hits;
-                //console.log(hits)
-                app.total = resp.hits.total
-                app.results = hits
+                self.total = resp.hits.total
+                if (!self.from){
+                  self.results = hits
+                }
+                else{
+                  console.log("appending")
+                  self.results = self.results.concat(hits)
+                }
+                self.from = self.from + self.size
             }, function (err) {
                 //console.trace(err.message);
             });
+          }
             return false;
          },
          run_query: function(e){
            console.log(e);
+           this.from = 0
            this.searchStr = e;
            this.runSearch();
+         },
+         nextSearch: function(e){
+             this.runSearch(e)
+           return false
+         },
+         resetPage: function(e){
+           this.from = 0
          }
        },
        computed:{
@@ -141,6 +164,8 @@ client.ping({
     console.log('All is well');
   }
 });
+
+app.doScroll = true
 
 </script>
 
