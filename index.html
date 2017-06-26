@@ -79,7 +79,7 @@
                 <div v-if="res._source.events.event.room"><b>Location: </b>
 		  <a v-bind:href= "formatRoomURL(res._source.events.event.room.split(' ')[1])"> Room {{res._source.events.event.room.split(' ')[1]}} </a>
 		</div>
-                <div v-else><b>Location: </b> <a href='http://www.vancouverconventioncentre.com/facility/floor-plans-and-specs#west-exhibition-hall-a_west-exhibition-hall-b1_west-exhibition-hall-b2_west-exhibition-hall-b3_west-exhibition-hall-c'>Poster Room</a></div>
+                <div v-else><b>Location: </b> <a href='http://www.vancouverconventioncentre.com/facility/floor-plans-and-specs#west-exhibition-hall-a_west-exhibition-hall-b1_west-exhibition-hall-b2_west-exhibition-hall-b3_west-exhibition-hall-c'>Poster {{res._source.abstractNumber}}</a></div>
               </p> <!--TODO: if null, show poster-->
               <p class="card-text">
                 <i style="color:grey;" v-for="auth in res._source.authorslist">
@@ -190,14 +190,21 @@ var app = new Vue({
          getCalLink: function(data){
            var s = new Date(data.startsOn)
            var e = new Date(data.endsOn)
+           var l = ''
 
            var dateTime = (s.toISOString().replace(/-|:|\.\d\d\d/g,""))+"/"+(e.toISOString().replace(/-|:|\.\d\d\d/g,""))
+
+           if (data.events.event.room == null) {
+            l = 'Poster ' +' '+ String(data.abstractNumber);
+          } else {
+            l = data.events.event.location +' West '+ data.events.event.room;
+          }
 
            return "http://www.google.com/calendar/event?action=TEMPLATE"+
            "&text="+data.title+
            "&dates="+dateTime+
-           "&details="+data.events.event.type
-           "&location="+data.events.event.location+
+           "&details="+data.events.event.type+
+           "&location="+l+
            "&trp=false"+
            "&sprop="+
            "&sprop=name:"
