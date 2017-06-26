@@ -40,7 +40,12 @@
      </nav>
      <div id="cards" class="row container">
        <div class="col-xs">
-        <p>hits {{total}}</p>
+         <div v-if="!total" class="alert alert-danger" role="alert">
+          <strong >Oh snap! {{total}}  hits!</strong> Change a few things up and try submitting again.
+        </div>
+        <div v-else class="alert alert-success" role="alert">
+         <strong >Hits {{total}} </strong>
+       </div>
        <div v-for="(res, index) in results">
            <div class="card box mt-2">
             <div class="card-block">
@@ -50,7 +55,7 @@
                 <div v-if="res._source.events.event.room"><b>Location: </b> {{res._source.events.event.room}}</div>
                 <div v-else><b>Location: </b> Poster Room</div>
               </p> <!--TODO: if null, show poster-->
-              <p class="card-text"><i style="color:grey;">{{res._source.authorslist.join(",")}}</i></p>
+              <p class="card-text"><i style="color:grey;">{{res._source.authorslist.join(", ")}}</i></p>
 
               <div class="collapse" v-bind:id="'collapseExample'+index">
                 <p class="card-text">
