@@ -66,11 +66,14 @@
             <div class="card-block">
               <h4 class="card-title"><a v-bind:href="res._source.previewurl">{{res._source.title}}</a></h4>
 	      <div v-if="res._source.abstractType == 'Abstract Submission'">
-                <p class="card-text"><a href='http://www.vancouverconventioncentre.com/facility/floor-plans-and-specs#west-exhibition-hall-a_west-exhibition-hall-b1_west-exhibition-hall-b2_west-exhibition-hall-b3_west-exhibition-hall-c'>Poster {{res._source.abstractNumber}}</a> : {{res._source.startsOn}}</p>
+                <p class="card-text"><a href='http://www.vancouverconventioncentre.com/facility/floor-plans-and-specs#west-exhibition-hall-a_west-exhibition-hall-b1_west-exhibition-hall-b2_west-exhibition-hall-b3_west-exhibition-hall-c'>Poster {{res._source.abstractNumber}}</a> : {{prettyStart(res._source.startsOn)}}</p>
 	        <div v-if="(res._source.title == res._source.events.event.title)">
                   <p class="card-text" v-if="res._source.events.event.room"><a v-bind:href= "formatRoomURL(res._source.events.event.room.split(' ')[1])"> Room {{res._source.events.event.room.split(' ')[1]}} </a></p>
-		  <p class="card-text"><b>Talk time:</b> {{res._source.events.event.startson}}</i></p>
+		  <p class="card-text"><b>Talk time:</b> {{prettyStart(res._source.events.event.startson)}}</i></p>
                 </div>
+              </div>
+        <div v-if="res._source.abstractType == 'Symposia'">
+                <p class="card-text" v-if="res._source.events.event.room"><a v-bind:href= "formatRoomURL(res._source.events.event.room.split(' ')[1])"><b> Symposia, Room </b>{{res._source.events.event.room.split(' ')[1]}} </a> : {{prettyStart(res._source.events.event.startson)}} to {{prettyEnd(res._source.events.event.endson)}}</i></p>
               </div>
 
               </p> <!--TODO: if null, show poster-->
@@ -180,11 +183,27 @@ var app = new Vue({
          resetPage: function(e){
            this.from = 0
          },
+         prettyStart: function(d){
+           var s = ''
+           if (d) {s = Date.parse(d).toString('ddd HH:mm')};
+           return s;
+         },
+         prettyEnd: function(d){
+           var s = ''
+           if (d) {s = Date.parse(d).toString('HH:mm')};
+           return s;
+         },
          getCalLink: function(data){
+          if (data.abstractType !=  'Abstract Submission' ){
+           var s = Date.parse(data.events.event.startson)
+           var e = Date.parse(data.events.event.endson)
+           var l = ''
+          } else {
            var s = Date.parse(data.startsOn)
            var e = Date.parse(data.endsOn)
            var l = ''
-
+          }
+           
            var dateTime = (s.toISOString().replace(/-|:|\.\d\d\d/g,""))+"/"+(e.toISOString().replace(/-|:|\.\d\d\d/g,""))
 
            if (data.events.event.room == null) {
