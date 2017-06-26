@@ -88,7 +88,9 @@
                 <br>
               </div>
 
-              <a href="#" class="btn btn-outline-primary btn-xs"><i class="fa fa-calendar" aria-hidden="true"></i></a>
+              <a class="btn btn-outline-primary btn-xs" v-bind:href="getCalLink(res._source)"
+              target="_blank" rel="nofollow"><i class="fa fa-calendar" aria-hidden="true"></i></a>
+
               <button class="btn btn-outline-info btn-xs" type="button" data-toggle="collapse" v-bind:data-target="'#collapseExample' + index" aria-expanded="false" v-bind:aria-controls="'collapseExample'+index">
                 <i class="fa fa-chevron-down" aria-hidden="true"></i>
               </button>
@@ -161,6 +163,22 @@ var app = new Vue({
          },
          resetPage: function(e){
            this.from = 0
+         },
+         getCalLink: function(data){
+           console.log("data is", data)
+           var s = new Date(data.startsOn)
+           var e = new Date(data.endsOn)
+
+           var dateTime = (s.toISOString().replace(/-|:|\.\d\d\d/g,""))+"/"+(e.toISOString().replace(/-|:|\.\d\d\d/g,""))
+
+           return "http://www.google.com/calendar/event?action=TEMPLATE"+
+           "&text="+data.title+
+           "&dates="+dateTime+
+           "&details="+data.events.event.type
+           "&location="+data.events.event.location+
+           "&trp=false"+
+           "&sprop="+
+           "&sprop=name:"
          }
        },
        computed:{
