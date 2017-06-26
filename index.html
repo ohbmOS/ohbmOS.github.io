@@ -58,7 +58,7 @@
               <h4 class="card-title">{{res._source.title}}</h4>
               <p class="card-text">{{res._source.startsOn}}</i></p>
               <p class="card-text">
-                <div v-if="res._source.events.event.room"><b>Location: </b>  <a v-bind:href="'http://www.vancouverconventioncentre.com/facility/floor-plans-and-specs#west-meeting-room-' + res._source.events.event.room.split(' ')[1].split('-')[0]"> Room {{res._source.events.event.room.split(' ')[1].split('-')[0]}} </a> </div>
+                <div v-if="res._source.events.event.room"><b>Location: </b>  <a v-bind:href="'http://www.vancouverconventioncentre.com/facility/floor-plans-and-specs#west-meeting-room-' + res._source.events.event.room.split(' ')[1].split('-')[0]"> Room {{res._source.events.event.room.split(' ')[1]}} </a> </div>
                 <div v-else><b>Location: </b> <a href='http://www.vancouverconventioncentre.com/facility/floor-plans-and-specs#west-exhibition-hall-a_west-exhibition-hall-b1_west-exhibition-hall-b2_west-exhibition-hall-b3_west-exhibition-hall-c'>Poster Room</a></div>
               </p> <!--TODO: if null, show poster-->
               <p class="card-text"><i style="color:grey;">{{res._source.authorslist.join(", ")}}</i></p>
