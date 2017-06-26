@@ -63,10 +63,10 @@
 -->
      <div id="cards" class="row container">
        <div class="col-xs">
-         <div v-if="!total" class="alert alert-danger" role="alert">
+         <div v-if="!this.init && !this.total" class="alert alert-danger" role="alert">
           <strong >Oh snap! {{total}}  hits!</strong> Change a few things up and try submitting again.
         </div>
-        <div v-else-if="total == 0" class="alert alert-success" role="alert">
+        <div v-else-if="total > 0" class="alert alert-success" role="alert">
          <strong >Hits {{total}} </strong>
        </div>
        <div v-for="(res, index) in results">
@@ -112,15 +112,17 @@ var app = new Vue({
          searchStr: "",
          from: 0,
          size:10,
-         doScroll: true
+         doScroll: true,
+         init: 1
        },
        methods:{
          runSearch: function(e){
            //console.log("hello")
+
            if (e) {
               e.preventDefault()
            }
-           if(this.from<this.total || this.total == 0){
+           if(this.from<=this.total){
              var self=this
            client.search({
               index: 'ohbm',
@@ -139,6 +141,7 @@ var app = new Vue({
                   self.results = self.results.concat(hits)
                 }
                 self.from = self.from + self.size
+                this.init = 0
             }, function (err) {
                 //console.trace(err.message);
             });
