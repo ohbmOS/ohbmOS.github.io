@@ -6,7 +6,7 @@
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
-   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css" type="text/css" >
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css" type="text/css" >
    <script src="https://cdnjs.cloudflare.com/ajax/libs/elasticsearch/13.2.0/elasticsearch.min.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
    <script src="https://unpkg.com/vue"></script>
@@ -75,7 +75,9 @@
               <h4 class="card-title">{{res._source.title}}</h4>
               <p class="card-text">{{res._source.startsOn}}</i></p>
               <p class="card-text">
-                <div v-if="res._source.events.event.room"><b>Location: </b>  <a v-bind:href="'http://www.vancouverconventioncentre.com/facility/floor-plans-and-specs#west-meeting-room-' + res._source.events.event.room.split(' ')[1].split('-')[0]"> Room {{res._source.events.event.room.split(' ')[1]}} </a> </div>
+                <div v-if="res._source.events.event.room"><b>Location: </b>  
+		  <a v-bind:href= "formatRoomURL(res._source.events.event.room.split(' ')[1])"> Room {{res._source.events.event.room.split(' ')[1]}} </a> 
+		</div>
                 <div v-else><b>Location: </b> <a href='http://www.vancouverconventioncentre.com/facility/floor-plans-and-specs#west-exhibition-hall-a_west-exhibition-hall-b1_west-exhibition-hall-b2_west-exhibition-hall-b3_west-exhibition-hall-c'>Poster Room</a></div>
               </p> <!--TODO: if null, show poster-->
               <p class="card-text"><i style="color:grey;">{{res._source.authorslist.join(", ")}}</i></p>
@@ -134,7 +136,19 @@ var app = new Vue({
            console.log(e);
            this.searchStr = e;
            this.runSearch();
+         },
+         formatRoomURL: function(room){
+          room = room.split('-')[0]
+          var place = ''
+          if ((room == 'AB') || (room == 'C')) {
+             place = 'ballroom-';
+             room = room[0].toLowerCase();
+          } else {
+             place = 'meeting-room-'
+          }
+          return 'http://www.vancouverconventioncentre.com/facility/floor-plans-and-specs#west-' + place + room
          }
+
        },
        computed:{
          formatAuth: function(authors){
