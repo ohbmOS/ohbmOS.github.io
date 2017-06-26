@@ -184,7 +184,7 @@ var app = new Vue({
 
            var dateTime = (s.toISOString().replace(/-|:|\.\d\d\d/g,""))+"/"+(e.toISOString().replace(/-|:|\.\d\d\d/g,""))
 
-           if (data.events.event.room == '') {
+           if (data.events.event.room == null) {
             l = 'Poster ' +' '+ String(data.abstractNumber);
           } else {
             l = data.events.event.location +' West '+ data.events.event.room;
