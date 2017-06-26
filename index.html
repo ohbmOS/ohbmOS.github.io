@@ -81,7 +81,11 @@
 		</div>
                 <div v-else><b>Location: </b> <a href='http://www.vancouverconventioncentre.com/facility/floor-plans-and-specs#west-exhibition-hall-a_west-exhibition-hall-b1_west-exhibition-hall-b2_west-exhibition-hall-b3_west-exhibition-hall-c'>Poster Room</a></div>
               </p> <!--TODO: if null, show poster-->
-              <p class="card-text"><i style="color:grey;">{{res._source.authorslist.join(", ")}}</i></p>
+              <p class="card-text">
+                <i style="color:grey;" v-for="auth in res._source.authorslist">
+                  <a href="#" v-on:click="searchAuth" style="color:grey; text-decoration: underline;">{{auth}}</a>,
+                </i>
+              </p>
 
               <div class="collapse" v-bind:id="'collapseExample'+index">
                 <p class="card-text">
@@ -158,6 +162,12 @@ var app = new Vue({
            this.from = 0
            this.searchStr = e;
            this.runSearch();
+         },
+         searchAuth: function(e){
+           console.log("searching auth", e.target.text)
+           this.searchStr = '"'+e.target.text+'"'
+           this.from = 0
+           this.runSearch()
          },
          formatRoomURL: function(room){
           room = room.split('-')[0]
