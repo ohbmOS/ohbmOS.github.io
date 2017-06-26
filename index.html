@@ -36,8 +36,14 @@
           <input class="form-control" type="text" placeholder="Search for OHBM Abstracts" v-model="searchStr" style="width:100%;" v-on:enter="runSearch">
           <button class="btn btn-outline-success my-2 my-sm-0" v-on:click="runSearch" hidden>Search</button>
        </form>
-
      </nav>
+     <h4> Examples:
+       <span class="badge badge-info" v-on:click="run_query('hippoca* AND ica')">hippoca* AND ica</span>
+       <span class="badge badge-info" v-on:click="run_query('authorslist:turner')">authorslist:turner</span>
+       <span class="badge badge-info" v-on:click="run_query('startsOn:2017-06-26')">startsOn:"2017-06-26"</span>
+       <span class="badge badge-info" v-on:click="run_query('fMRI AND ICA')">capitalize logic: OR AND</span>
+     </h4>
+
      <div id="cards" class="row container">
        <div class="col-xs">
          <div v-if="!total" class="alert alert-danger" role="alert">
@@ -90,7 +96,9 @@ var app = new Vue({
        methods:{
          runSearch: function(e){
            //console.log("hello")
-           e.preventDefault()
+           if (e) {
+              e.preventDefault()
+           }
            client.search({
               index: 'ohbm',
               type: 'abstract',
@@ -104,6 +112,11 @@ var app = new Vue({
                 //console.trace(err.message);
             });
             return false;
+         },
+         run_query: function(e){
+           console.log(e);
+           this.searchStr = e;
+           this.runSearch();
          }
        },
        computed:{
