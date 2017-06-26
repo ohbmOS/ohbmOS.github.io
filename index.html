@@ -76,8 +76,8 @@
               <h4 class="card-title">{{res._source.title}}</h4>
               <p class="card-text">{{res._source.startsOn}}</i></p>
               <p class="card-text">
-                <div v-if="res._source.events.event.room"><b>Location: </b>  
-		  <a v-bind:href= "formatRoomURL(res._source.events.event.room.split(' ')[1])"> Room {{res._source.events.event.room.split(' ')[1]}} </a> 
+                <div v-if="res._source.events.event.room"><b>Location: </b>
+		  <a v-bind:href= "formatRoomURL(res._source.events.event.room.split(' ')[1])"> Room {{res._source.events.event.room.split(' ')[1]}} </a>
 		</div>
                 <div v-else><b>Location: </b> <a href='http://www.vancouverconventioncentre.com/facility/floor-plans-and-specs#west-exhibition-hall-a_west-exhibition-hall-b1_west-exhibition-hall-b2_west-exhibition-hall-b3_west-exhibition-hall-c'>Poster Room</a></div>
               </p> <!--TODO: if null, show poster-->
@@ -178,7 +178,6 @@ var app = new Vue({
            this.from = 0
          },
          getCalLink: function(data){
-           console.log("data is", data)
            var s = new Date(data.startsOn)
            var e = new Date(data.endsOn)
 
