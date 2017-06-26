@@ -49,17 +49,6 @@
     </div>
   </div>
 </div>
-<!--
-     <div class="card row">
-     <h4>
-       <button class="btn col-sm-2">Examples:</button>
-       <button class="btn btn-info col-sm-3" v-on:click="run_query('hippoca* AND ica')">hippoca* AND ica</button>
-       <button class="btn btn-info col-sm-3" v-on:click="run_query('authorslist:turner')">authorslist:turner</button>
-       <button class="btn btn-info col-sm-3" v-on:click="run_query('startsOn:2017-06-26')">startsOn:"2017-06-26"</button>
-       <button class="btn btn-info col-sm-3" v-on:click="run_query('fMRI AND ICA')">logic: OR AND</button>
-     </h4>
-     </div>
--->
      <div id="cards" class="row" style="padding-left:2%; padding-right:2%;">
        <div>
          <div v-if="!this.init && !this.total" class="alert alert-danger" role="alert">
@@ -73,7 +62,7 @@
        <div v-for="(res, index) in results" class="card-deck">
            <div class="card box mt-2">
             <div class="card-block">
-              <h4 class="card-title">{{res._source.title}}</h4>
+              <h4 class="card-title"><a v-bind:href="res._source.previewurl">{{res._source.title}}</a></h4>
 	      <div v-if="res._source.abstractType == 'Abstract Submission'">
                 <p class="card-text"><a href='http://www.vancouverconventioncentre.com/facility/floor-plans-and-specs#west-exhibition-hall-a_west-exhibition-hall-b1_west-exhibition-hall-b2_west-exhibition-hall-b3_west-exhibition-hall-c'>Poster {{res._source.abstractNumber}}</a> : {{res._source.startsOn}}</p>
 	        <div v-if="(res._source.title == res._source.events.event.title)">
