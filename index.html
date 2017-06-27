@@ -108,6 +108,7 @@
       <a class="dropdown-item" v-on:click="run_query('authorslist:turner')">authorslist:turner</a>
       <a class="dropdown-item" v-on:click="run_query('startsOn:2017-06-26')">startsOn:"2017-06-26"</a>
       <a class="dropdown-item" v-on:click="run_query('fMRI AND ICA')">logic: OR AND</a>
+      <a class="dropdown-item" v-on:click="run_query('abstractType:Symposia')">abstractType:Symposia</a>
     </div>
   </div>
 
@@ -131,12 +132,11 @@
 	      <div v-if="res._source.abstractType == 'Abstract Submission'">
                 <p class="card-text"><a href='http://www.vancouverconventioncentre.com/facility/floor-plans-and-specs#west-exhibition-hall-a_west-exhibition-hall-b1_west-exhibition-hall-b2_west-exhibition-hall-b3_west-exhibition-hall-c'>Poster {{res._source.abstractNumber}}</a> : {{prettyStart(res._source.startsOn)}}</p>
 	        <div v-if="(res._source.title == res._source.events.event.title)">
-                  <p class="card-text" v-if="res._source.events.event.room"><a v-bind:href= "formatRoomURL(res._source.events.event.room.split(' ')[1])"> Room {{res._source.events.event.room.split(' ')[1]}} </a></p>
-		  <p class="card-text"><b>Talk time:</b> {{prettyStart(res._source.events.event.startson)}}</i></p>
+                  <p class="card-text" v-if="res._source.events.event.room"><strong>Talk, <a v-bind:href= "formatRoomURL(res._source.events.event.room.split(' ')[1])">Room {{res._source.events.event.room.split(' ')[1]}}</a></strong> : {{prettyStart(res._source.events.event.startson)}}</i></p>
                 </div>
               </div>
         <div v-if="res._source.abstractType == 'Symposia'">
-                <p class="card-text" v-if="res._source.events.event.room"><a v-bind:href= "formatRoomURL(res._source.events.event.room.split(' ')[1])"><b> Symposia, Room </b>{{res._source.events.event.room.split(' ')[1]}} </a> : {{prettyStart(res._source.events.event.startson)}} to {{prettyEnd(res._source.events.event.endson)}}</i></p>
+                <p class="card-text" v-if="res._source.events.event.room"><a v-bind:href= "formatRoomURL(res._source.events.event.room.split(' ')[1])"><strong> Symposia, Room {{res._source.events.event.room.split(' ')[1]}} </a> </strong> : {{prettyStart(res._source.events.event.startson)}} to {{prettyEnd(res._source.events.event.endson)}}</i></p>
               </div>
 
               </p> <!--TODO: if null, show poster-->
@@ -184,6 +184,32 @@ var app = new Vue({
          init: 1
        },
        methods:{
+        run_event_Search: function(id,index,arr){
+           console.log("running search", this.searchStr)
+           console.log(index)
+           console.log(arr)
+           if(this.from<=this.total){
+             var self=this
+           client.search({
+              index: 'ohbm',
+              type: 'event',
+              size:this.size,
+              from:this.from,
+              q: "@id:" + id + " AND _type:event"
+            }).then(function (resp) {
+                var hits = resp.hits.hits;
+                console.log(hits)
+                if (hits.length>0){
+                  self.results.forEach(function (item,index,arr){
+                    if ((item._source.abstractType == 'Abstract Submission') && (item._source.title == item._source.events.event.title) && (item._source.events.event.parent['@id'] == hits[0]._source['@id'])){self.results[index]._source.events.event.room = hits[0]._source.presentations.presentation[0].room['#text'];}
+                    })
+                } else {console.log(hits)}
+            }, function (err) {
+                //console.trace(err.message);
+            });
+          }
+            return false;
+         },
          runSearch: function(e){
            console.log("running search", this.searchStr)
 
@@ -200,6 +226,13 @@ var app = new Vue({
               q: this.searchStr
             }).then(function (resp) {
                 var hits = resp.hits.hits;
+                hits.forEach(function (item,index,arr){
+
+                  if ((item._source.abstractType == 'Abstract Submission') && (item._source.title == item._source.events.event.title)){
+                    var id = item._source.events.event.parent['@id']
+                    self.run_event_Search(id,arr,index)
+                  }
+                })
                 self.total = resp.hits.total
                 if (!self.from){
                   self.results = hits
@@ -288,6 +321,7 @@ var app = new Vue({
 
        },
        computed:{
+
        }
 })
 
