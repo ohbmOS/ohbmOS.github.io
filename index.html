@@ -136,7 +136,7 @@
                 </div>
               </div>
         <div v-if="res._source.abstractType == 'Symposia'">
-                <p class="card-text" v-if="res._source.events.event.room"><a v-bind:href= "formatRoomURL(res._source.events.event.room.split(' ')[1])"><strong> Symposia, Room {{res._source.events.event.room.split(' ')[1]}} </a> </strong> : {{prettyStart(res._source.events.event.startson)}} to {{prettyEnd(res._source.events.event.endson)}}</i></p>
+                <p class="card-text" v-if="res._source.events.event.room"><strong>Symposia, <a v-bind:href= "formatRoomURL(res._source.events.event.room.split(' ')[1])">Room {{res._source.events.event.room.split(' ')[1]}} </a> </strong> : {{prettyStart(res._source.events.event.startson)}} to {{prettyEnd(res._source.events.event.endson)}}</i></p>
               </div>
 
               </p> <!--TODO: if null, show poster-->
