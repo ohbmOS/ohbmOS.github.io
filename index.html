@@ -1,7 +1,7 @@
 <html>
 <head>
    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-   <title>The Open Science SIG's OHBM Hackathon 2017 Itinerary App App</title>
+   <title>The Open Science SIG's OHBM Hackathon 2018 Itinerary App App</title>
    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
@@ -115,11 +115,11 @@
 </div>
      <div id="cards" class="row" style="padding-left:2%; padding-right:2%;">
        <div>
-        <div v-if="this.init" class="alert alert-danger" role="alert">
+        <!-- <div v-if="this.init" class="alert alert-danger" role="alert">
                  <strong>Thanks for making OHBM 2017 an amazing conference. The backend for the search functionality is hibernating till next year, but please help us improve this tool in the meantime. <a href="https://github.com/ohbmOS/ohbmOS.github.io">Frontend code</a>, <a href="https://github.com/satra/ohbm">Backend code</a></strong>
-        </div>
+        </div> -->
         <div v-if="this.init" class="alert alert-info" role="alert">
-                 <strong>The Open Science SIG's OHBM Hackathon 2017 Itinerary App</strong>
+                 <strong>The Open Science SIG's OHBM Hackathon 2018 Itinerary App. Please provide feedback and help improve our app: <a href="https://github.com/ohbmOS/ohbmOS.github.io">Frontend code</a>, <a href="https://github.com/satra/ohbm">Backend code</a></strong>
         </div>
          <div v-else-if="!this.init && !this.total" class="alert alert-danger" role="alert">
           <strong >Oh snap! {{total}}  hits!</strong> Change a few things up and try submitting again.
@@ -343,7 +343,7 @@ var app = new Vue({
 */
 
 var client = new elasticsearch.Client({
-  host: "http://elastic:changeme@174.129.20.29:9200",
+  host: "http://elastic:changeme@54.163.252.185:9200",
   //log: "trace"
 });
 
