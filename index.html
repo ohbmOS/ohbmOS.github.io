@@ -284,14 +284,25 @@ var app = new Vue({
            this.from = 0
          },
          prettyStart: function(d){
+          try {
            var s = ''
            if (d) {s = Date.parse(d).toString('ddd HH:mm')};
            return s;
-         },
-         prettyEnd: function(d){
-           var s = ''
-           if (d) {s = Date.parse(d).toString('HH:mm')};
+          }
+          catch(err) {
            return s;
+          }
+         },
+
+         prettyEnd: function(d){
+           try {
+           var s = ''
+                    if (d) {s = Date.parse(d).toString('HH:mm')};
+           return s;
+          }
+          catch(err) {
+           return s;
+          }
          },
          getCalLink: function(data){
           if (data.abstractType !=  'Abstract Submission' ){
@@ -303,8 +314,12 @@ var app = new Vue({
            var e = Date.parse(data.endsOn)
            var l = ''
           }
-
-           var dateTime = (s.toISOString().replace(/-|:|\.\d\d\d/g,""))+"/"+(e.toISOString().replace(/-|:|\.\d\d\d/g,""))
+           try {
+            var dateTime = (s.toISOString().replace(/-|:|\.\d\d\d/g,""))+"/"+(e.toISOString().replace(/-|:|\.\d\d\d/g,""))
+           }
+           catch(err) {
+            var dateTime = ""
+           }
 
            if (data.events.event.room == null) {
             l = 'Poster ' +' '+ String(data.abstractNumber);
@@ -343,7 +358,7 @@ var app = new Vue({
 */
 
 var client = new elasticsearch.Client({
-  host: "http://elastic:changeme@54.163.252.185:9200",
+  host: "http://elastic:changeme@search.ohbm-openscience.org:9200",
   //log: "trace"
 });
 
