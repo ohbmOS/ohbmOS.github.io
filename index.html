@@ -135,11 +135,11 @@
 	      <div v-if="res._source.abstractType == 'Abstract Submission'">
                 <p class="card-text"><a href='http://www.vancouverconventioncentre.com/facility/floor-plans-and-specs#west-exhibition-hall-a_west-exhibition-hall-b1_west-exhibition-hall-b2_west-exhibition-hall-b3_west-exhibition-hall-c'>Poster {{res._source.abstractNumber}}</a> : {{prettyStart(res._source.startsOn)}}</p>
 	        <div v-if="(res._source.title == res._source.events.event.title)">
-                  <p class="card-text" v-if="res._source.events.event.room"><strong>Talk, <a v-bind:href= "formatRoomURL(res._source.events.event.room.split(' ')[1])">Room {{res._source.events.event.room.split(' ')[1]}}</a></strong> : {{prettyStart(res._source.events.event.startson)}}</i></p>
+                  <p class="card-text" v-if="res._source.events.event.room"><strong>Talk, <p v-bind:href= "formatRoomURL(res._source.events.event.room.split(' ')[1])">Room {{res._source.events.event.room.split(' ')[1]}}</p></strong> : {{prettyStart(res._source.events.event.startson)}}</i></p>
                 </div>
               </div>
         <div v-if="res._source.abstractType == 'Symposia'">
-                <p class="card-text" v-if="res._source.events.event.room"><strong>Symposia, <a v-bind:href= "formatRoomURL(res._source.events.event.room.split(' ')[1])">Room {{res._source.events.event.room.split(' ')[1]}} </a> </strong> : {{prettyStart(res._source.events.event.startson)}} to {{prettyEnd(res._source.events.event.endson)}}</i></p>
+                <p class="card-text" v-if="res._source.events.event.room"><strong>Symposia, <p v-bind:href= "formatRoomURL(res._source.events.event.room.split(' ')[1])">Room {{res._source.events.event.room.split(' ')[1]}} </p> </strong> : {{prettyStart(res._source.events.event.startson)}} to {{prettyEnd(res._source.events.event.endson)}}</i></p>
               </div>
 
               </p> <!--TODO: if null, show poster-->
@@ -274,7 +274,7 @@ var app = new Vue({
           } else {
              place = 'meeting-room-'
           }
-          return 'http://www.vancouverconventioncentre.com/facility/floor-plans-and-specs#west-' + place + room
+          return place + room
          },
          nextSearch: function(e){
              this.runSearch(e)
@@ -324,7 +324,7 @@ var app = new Vue({
            if (data.events.event.room == null) {
             l = 'Poster ' +' '+ String(data.abstractNumber);
           } else {
-            l = data.events.event.location +' West '+ data.events.event.room;
+            l = data.events.event.location + ' ' + data.events.event.room;
           }
 
            return "http://www.google.com/calendar/event?action=TEMPLATE"+
