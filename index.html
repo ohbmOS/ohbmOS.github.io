@@ -133,7 +133,7 @@
             <div class="card-block">
               <h4 class="card-title"><a v-bind:href="res._source.previewurl">{{res._source.title}}</a></h4>
 	      <div v-if="res._source.abstractType == 'Abstract Submission'">
-                <p class="card-text">Poster {{res._source.abstractNumber}} : {{prettyStart(res._source.startsOn)}}</p>
+                <p class="card-text">Poster {{res._source.abstractNumber}}</p>
 	        <div v-if="(res._source.title == res._source.events.event.title)">
                   <p class="card-text" v-if="res._source.events.event.room"><strong>Talk, <p v-bind:href= "formatRoomURL(res._source.events.event.room.split(' ')[1])">Room {{res._source.events.event.room.split(' ')[1]}}</p></strong> : {{prettyStart(res._source.events.event.startson)}}</i></p>
                 </div>
